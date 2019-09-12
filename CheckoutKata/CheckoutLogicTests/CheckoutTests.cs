@@ -70,6 +70,37 @@ namespace CheckoutLogicTests
 			Assert.AreEqual(2, checkoutItems[2].Quantity);
 		}
 
+		/// <summary>
+		/// Proves that the Checkout correctly passes it's items to the price calculation logic..
+		/// </summary>
+		[TestMethod]
+		public void Checkout_ScanItem_PassItemsToPriceCalculation()
+		{
+			//Arrange
+			Item appleItem = new Item { Sku = "A99" };
+			Item biscuitItem = new Item { Sku = "B15" };
+			Item crispsItem = new Item { Sku = "C40" };
+			var priceCalculationLogic = Substitute.For<IPriceCalculationLogic>();
+			//return some mock prices when requested
+			priceCalculationLogic.GetPrice(Arg.Is<CheckoutItem>(x => x.Sku == "A99")).Returns(0.5M);
+			priceCalculationLogic.GetPrice(Arg.Is<CheckoutItem>(x => x.Sku == "B15")).Returns(0.3M);
+			priceCalculationLogic.GetPrice(Arg.Is<CheckoutItem>(x => x.Sku == "C40")).Returns(0.6M);
+			//Act
+			Checkout checkout = new Checkout(priceCalculationLogic);
+			checkout.Scan(appleItem);
+			checkout.Scan(biscuitItem);
+			checkout.Scan(crispsItem);
+
+			//Assert
+			decimal total = checkout.Total();
+			Assert.AreEqual(1.4M, total);
+
+			//Ensure the methods were each called.
+			priceCalculationLogic.Received(1).GetPrice(Arg.Is<CheckoutItem>(x => x.Sku == "A99"));
+			priceCalculationLogic.Received(1).GetPrice(Arg.Is<CheckoutItem>(x => x.Sku == "B15"));
+			priceCalculationLogic.Received(1).GetPrice(Arg.Is<CheckoutItem>(x => x.Sku == "C40"));
+
+		}
 
 	}
 }
