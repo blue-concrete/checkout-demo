@@ -12,6 +12,12 @@ namespace CheckoutLogic
 	{
 
 		private List<CheckoutItem> checkoutItems = new List<CheckoutItem>();
+		private readonly IPriceCalculationLogic priceCalculationLogic;
+
+		public Checkout(IPriceCalculationLogic priceCalculationLogic)
+		{
+			this.priceCalculationLogic = priceCalculationLogic ?? throw new ArgumentNullException(nameof(priceCalculationLogic));
+		}
 
 		/// <summary>
 		/// The current total of all items that have been scanned
@@ -19,7 +25,7 @@ namespace CheckoutLogic
 		/// <returns></returns>
 		public decimal Total()
 		{
-			return this.checkoutItems.Sum(p => p.Quantity * p.Price);
+			return this.checkoutItems.Sum(p => this.priceCalculationLogic.GetPrice(p));
 		}
 
 		/// <summary>
