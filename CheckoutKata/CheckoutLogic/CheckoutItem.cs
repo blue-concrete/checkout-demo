@@ -18,5 +18,10 @@ namespace CheckoutLogic
 		/// The quantity of an item that has been scanned.
 		/// </summary>
 		public int Quantity { get; set; }
+
+		/// <summary>
+		/// The price of the item that has been scanned
+		/// </summary>
+		public decimal Price { get; set; }
 	}
 }
