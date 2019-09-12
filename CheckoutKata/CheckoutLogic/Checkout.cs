@@ -19,7 +19,7 @@ namespace CheckoutLogic
 		/// <returns></returns>
 		public decimal Total()
 		{
-			return 0m;
+			return this.checkoutItems.Sum(p => p.Quantity * p.Price);
 		}
 
 		/// <summary>
@@ -49,7 +49,7 @@ namespace CheckoutLogic
 			if (checkoutItem == null)
 			{
 				//no item with sku was found so create one and add to list (without quantity initially)
-				checkoutItem = new CheckoutItem { Sku = item.Sku }; 
+				checkoutItem = new CheckoutItem { Sku = item.Sku, Price = item.ItemPrice }; 
 				this.checkoutItems.Add(checkoutItem);
 			}
 			//increment quantity

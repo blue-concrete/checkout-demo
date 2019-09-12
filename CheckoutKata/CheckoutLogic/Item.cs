@@ -14,5 +14,9 @@ namespace CheckoutLogic
 		/// </summary>
 		public string Sku { get; set; }
 
+		/// <summary>
+		/// The Price of the scanned item
+		/// </summary>
+		public decimal ItemPrice { get; set; }
 	}
 }
