@@ -22,7 +22,7 @@ namespace CheckoutLogic
 
 		public decimal GetPrice(CheckoutItem checkoutItem)
 		{
-			return 0m;
+			return checkoutItem.Price * checkoutItem.Quantity;
 		}
 	}
 }
