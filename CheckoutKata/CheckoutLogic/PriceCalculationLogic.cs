@@ -22,7 +22,18 @@ namespace CheckoutLogic
 
 		public decimal GetPrice(CheckoutItem checkoutItem)
 		{
-			return checkoutItem.Price * checkoutItem.Quantity;
+			var specialOffer = this.specialOfferRepository.GetBySku(checkoutItem.Sku);
+			if (specialOffer == null || specialOffer.Quantity > checkoutItem.Quantity)
+			{
+				return checkoutItem.Price * checkoutItem.Quantity;
+			}
+			else
+			{
+				int offerQuantity = checkoutItem.Quantity / specialOffer.Quantity;
+				int remainder = checkoutItem.Quantity % specialOffer.Quantity;
+
+				return (specialOffer.OfferPrice * offerQuantity) + (remainder * checkoutItem.Price);
+			}
 		}
 	}
 }
